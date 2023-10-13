@@ -4,11 +4,13 @@ import axios from "axios";
 import AddProductModal from "../components/AddProductModal";
 import ViewProductModal from "../components/ViewProductModal";
 import EditProductModal from "../components/EditProductModal";
+import { FloatingLabel, Form } from "react-bootstrap";
 
 const Products = () => {
   const URL = import.meta.env.VITE_BACKEND_URL;
 
   const [product, setProduct] = useState([]);
+  const [originalProduct, setOriginalProduct] = useState([]);
   const [addProduct, setAddProduct] = useState([]);
   const [viewProduct, setViewProduct] = useState([]);
   const [editProduct, setEditProduct] = useState([]);
@@ -23,6 +25,7 @@ const Products = () => {
         const resp = await axios.get(URL + "/products");
         // console.log(resp.data.products)
         setProduct(resp.data.products);
+        setOriginalProduct(resp.data.products);
       } catch (error) {
         console.log(error);
       }
@@ -113,33 +116,56 @@ const Products = () => {
     });
   };
 
-  const editCloseHandle=(e)=>{
+  const editCloseHandle = (e) => {
     e.preventDefault();
-    setEditShow(false)
-  }
+    setEditShow(false);
+  };
 
-  const editProductHandle=(e)=>{
+  const editProductHandle = (e) => {
     e.preventDefault();
-    const updatedData=product.map((item)=>{
-      if(item.id === editProduct.id){
-        return editProduct
-      }else{
-        return item
+    const updatedData = product.map((item) => {
+      if (item.id === editProduct.id) {
+        return editProduct;
+      } else {
+        return item;
       }
+    });
+    setProduct(updatedData);
+    setEditShow(false);
+  };
+
+  // SearchBar
+
+  const searchChangeHandle=(e)=>{
+    e.preventDefault()
+    // console.log(e.target.value)
+    // console.log(product[0].title.includes(e.target.value))
+
+    const searchedProd = originalProduct.filter((item)=>{
+      return item.title.toLowerCase().includes(e.target.value.toLowerCase())
     })
-    setProduct(updatedData)
-    setEditShow(false)
+    setProduct(searchedProd)
   }
 
   return (
     <>
-      <button
-        className="btn btn-outline-dark mt-3 ms-2"
-        onClick={addProductClickHandle}
-      >
-        Add Product
-      </button>
-      <div className="productContainer">
+      <div className=" container d-flex  justify-content-between p-3">
+        <button
+          className="btn btn-outline-dark"
+          onClick={addProductClickHandle}
+        >
+          Add Product
+        </button>
+        <FloatingLabel
+          controlId="floatingInput"
+          label="Search Products Here"
+          className="w-25"
+        >
+          <Form.Control type="text" placeholder="" onChange={searchChangeHandle} />
+        </FloatingLabel>
+      </div>
+
+      <div className="container productContainer" >
         {product.map((prod) => {
           return (
             <ProductList
