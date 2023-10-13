@@ -14,6 +14,7 @@ const Products = () => {
   const [addProduct, setAddProduct] = useState([]);
   const [viewProduct, setViewProduct] = useState([]);
   const [editProduct, setEditProduct] = useState([]);
+  const [category, setCategory] = useState([]);
 
   const [addshow, setAddShow] = useState(false);
   const [viewShow, setViewShow] = useState(false);
@@ -26,6 +27,19 @@ const Products = () => {
         // console.log(resp.data.products)
         setProduct(resp.data.products);
         setOriginalProduct(resp.data.products);
+
+        const categories = resp.data.products.map((item)=>{
+          return item.category;
+          
+        })
+        // console.log(categories)
+        
+        const uniqueCategory = [...new Set(categories)]
+        // console.log(uniqueCategory)
+        // console.log(category)
+        setCategory(uniqueCategory)
+       
+
       } catch (error) {
         console.log(error);
       }
@@ -136,15 +150,29 @@ const Products = () => {
 
   // SearchBar
 
-  const searchChangeHandle=(e)=>{
-    e.preventDefault()
+  const searchChangeHandle = (e) => {
+    e.preventDefault();
     // console.log(e.target.value)
     // console.log(product[0].title.includes(e.target.value))
 
-    const searchedProd = originalProduct.filter((item)=>{
-      return item.title.toLowerCase().includes(e.target.value.toLowerCase())
-    })
-    setProduct(searchedProd)
+    const searchedProd = originalProduct.filter((item) => {
+      return item.title.toLowerCase().includes(e.target.value.toLowerCase());
+    });
+    setProduct(searchedProd);
+  };
+
+  //FilterProdutcs
+
+  const filterProducts=(data)=>{
+    if(data !== ""){
+      const filteredData = originalProduct.filter((item)=>{
+        return item.category === data
+      })
+      setProduct(filteredData)
+    }else{
+      setProduct(originalProduct)
+    }
+
   }
 
   return (
@@ -156,16 +184,27 @@ const Products = () => {
         >
           Add Product
         </button>
+        <Form.Select style={{ width: "13rem" }} onChange={(e)=>filterProducts(e.target.value)}>
+          <option value="">Filter by Category</option>
+          {category.map((item)=>{
+            return(<option key={item} value={item}>{item}</option>)
+          })}
+
+        </Form.Select>
         <FloatingLabel
           controlId="floatingInput"
           label="Search Products Here"
           className="w-25"
         >
-          <Form.Control type="text" placeholder="" onChange={searchChangeHandle} />
+          <Form.Control
+            type="text"
+            placeholder=""
+            onChange={searchChangeHandle}
+          />
         </FloatingLabel>
       </div>
 
-      <div className="container productContainer" >
+      <div className="container productContainer">
         {product.map((prod) => {
           return (
             <ProductList
