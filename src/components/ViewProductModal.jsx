@@ -12,7 +12,7 @@ const ViewProductModal = ({viewshow, viewChangeHandle, viewprodX, viewCloseHandl
     <>
      <Modal show={viewshow} >
         <Modal.Header closeButton>
-          <Modal.Title>Add Product </Modal.Title>
+          <Modal.Title>View Product </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <CardImg  style={{height:"300px"}} src={viewprodX.thumbnail} onChange={viewChangeHandle}></CardImg>       

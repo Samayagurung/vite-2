@@ -3,6 +3,7 @@ import ProductList from "../components/ProductList";
 import axios from "axios";
 import AddProductModal from "../components/AddProductModal";
 import ViewProductModal from "../components/ViewProductModal";
+import EditProductModal from "../components/EditProductModal";
 
 const Products = () => {
   const URL = import.meta.env.VITE_BACKEND_URL;
@@ -10,9 +11,11 @@ const Products = () => {
   const [product, setProduct] = useState([]);
   const [addProduct, setAddProduct] = useState([]);
   const [viewProduct, setViewProduct] = useState([]);
+  const [editProduct, setEditProduct] = useState([]);
 
   const [addshow, setAddShow] = useState(false);
   const [viewShow, setViewShow] = useState(false);
+  const [editShow, setEditShow] = useState(false);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -65,27 +68,67 @@ const Products = () => {
 
   // View Product
 
-  const viewHandle=(e,id)=>{
+  const viewHandle = (e, id) => {
     e.preventDefault();
     // console.log("click")
-    setViewShow(true)
-    const viewProd= product.find((item)=>{
-      return item.id === id
-    })
-    setViewProduct(viewProd)
-  }
+    setViewShow(true);
+    const viewProd = product.find((item) => {
+      return item.id === id;
+    });
+    setViewProduct(viewProd);
+  };
 
-  const viewChangeHandle=(e)=>{
+  const viewChangeHandle = (e) => {
     e.preventDefault();
     // console.log(e.target.name, e.target.value)
-    setViewProduct((prev)=>{
-      return {...prev,[e.target.name]:e.target.value}
-    })
+    setViewProduct((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const viewCloseHandle = (e) => {
+    e.preventDefault();
+    setViewShow(false);
+  };
+
+  // Edit Product
+
+  const editHandle = (e, id) => {
+    e.preventDefault();
+    // console.log("clicked")
+    setEditShow(true);
+
+    const editedProd = product.find((item) => {
+      return item.id === id;
+    });
+    setEditProduct(editedProd);
+  };
+
+  const editChangeHandle = (e) => {
+    e.preventDefault();
+    // console.log(e.target.name, e.target.value)
+
+    setEditProduct((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
+  const editCloseHandle=(e)=>{
+    e.preventDefault();
+    setEditShow(false)
   }
 
-  const viewCloseHandle=(e)=>{
+  const editProductHandle=(e)=>{
     e.preventDefault();
-    setViewShow(false)
+    const updatedData=product.map((item)=>{
+      if(item.id === editProduct.id){
+        return editProduct
+      }else{
+        return item
+      }
+    })
+    setProduct(updatedData)
+    setEditShow(false)
   }
 
   return (
@@ -104,6 +147,7 @@ const Products = () => {
               prodX={prod}
               deleteHandle={deleteHandle}
               viewHandle={viewHandle}
+              editHandle={editHandle}
             />
           );
         })}
@@ -114,7 +158,19 @@ const Products = () => {
         addCloseHandle={addCloseHandle}
         addProductHandle={addProductHandle}
       />
-      <ViewProductModal viewshow={viewShow} viewChangeHandle={viewChangeHandle} viewprodX={viewProduct} viewCloseHandle={viewCloseHandle} />
+      <ViewProductModal
+        viewshow={viewShow}
+        viewChangeHandle={viewChangeHandle}
+        viewprodX={viewProduct}
+        viewCloseHandle={viewCloseHandle}
+      />
+      <EditProductModal
+        editShowX={editShow}
+        editChangeHandle={editChangeHandle}
+        editProdX={editProduct}
+        editCloseHandle={editCloseHandle}
+        editProductHandle={editProductHandle}
+      />
     </>
   );
 };
