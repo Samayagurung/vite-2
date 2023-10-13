@@ -50,6 +50,16 @@ const Products = () => {
     setAddShow(false);
   };
 
+  // Delete Product
+  const deleteHandle = (e, id) => {
+    e.preventDefault();
+
+    const filteredProduct = product.filter((prod) => {
+      return prod.id !== id;
+    });
+    setProduct(filteredProduct);
+  };
+
   return (
     <>
       <button
@@ -60,7 +70,13 @@ const Products = () => {
       </button>
       <div className="productContainer">
         {product.map((prod) => {
-          return <ProductList key={prod.id} prodX={prod} />;
+          return (
+            <ProductList
+              key={prod.id}
+              prodX={prod}
+              deleteHandle={deleteHandle}
+            />
+          );
         })}
       </div>
       <AddProductModal
