@@ -5,8 +5,11 @@ import AddProductModal from "../components/AddProductModal";
 import ViewProductModal from "../components/ViewProductModal";
 import EditProductModal from "../components/EditProductModal";
 import { FloatingLabel, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import { successToast } from "../services/toast.service";
 
 const Products = () => {
+  const nav = useNavigate();
   const URL = import.meta.env.VITE_BACKEND_URL;
 
   const [product, setProduct] = useState([]);
@@ -28,18 +31,15 @@ const Products = () => {
         setProduct(resp.data.products);
         setOriginalProduct(resp.data.products);
 
-        const categories = resp.data.products.map((item)=>{
+        const categories = resp.data.products.map((item) => {
           return item.category;
-          
-        })
+        });
         // console.log(categories)
-        
-        const uniqueCategory = [...new Set(categories)]
+
+        const uniqueCategory = [...new Set(categories)];
         // console.log(uniqueCategory)
         // console.log(category)
-        setCategory(uniqueCategory)
-       
-
+        setCategory(uniqueCategory);
       } catch (error) {
         console.log(error);
       }
@@ -163,20 +163,37 @@ const Products = () => {
 
   //FilterProdutcs
 
-  const filterProducts=(data)=>{
-    if(data !== ""){
-      const filteredData = originalProduct.filter((item)=>{
-        return item.category === data
-      })
-      setProduct(filteredData)
-    }else{
-      setProduct(originalProduct)
+  const filterProducts = (data) => {
+    if (data !== "") {
+      const filteredData = originalProduct.filter((item) => {
+        return item.category === data;
+      });
+      setProduct(filteredData);
+    } else {
+      setProduct(originalProduct);
     }
+  };
 
-  }
+  // LogOut
+
+  const logoutHandle = (e) => {
+    e.preventDefault();
+    localStorage.clear();
+    nav("/");
+    successToast("Logout Successfully");
+  };
 
   return (
     <>
+      <div className="container d-flex justify-content-center">
+        <button
+          className="btn btn-secondary mt-3 mb-2 p-2"
+          onClick={logoutHandle}
+        >
+          Log Out
+        </button>
+      </div>
+
       <div className=" container d-flex  justify-content-between p-3">
         <button
           className="btn btn-outline-dark"
@@ -184,12 +201,18 @@ const Products = () => {
         >
           Add Product
         </button>
-        <Form.Select style={{ width: "13rem" }} onChange={(e)=>filterProducts(e.target.value)}>
+        <Form.Select
+          style={{ width: "13rem" }}
+          onChange={(e) => filterProducts(e.target.value)}
+        >
           <option value="">Filter by Category</option>
-          {category.map((item)=>{
-            return(<option key={item} value={item}>{item}</option>)
+          {category.map((item) => {
+            return (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            );
           })}
-
         </Form.Select>
         <FloatingLabel
           controlId="floatingInput"

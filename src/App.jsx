@@ -5,6 +5,7 @@ import Signup from "./pages/Signup";
 import Navbar1 from "./components/Navbar";
 import Login from "./pages/Login";
 import Products from "./pages/Products";
+import SecureRoutes from "./routes/SecureRoutes";
 
 function App() {
   return (
@@ -12,8 +13,11 @@ function App() {
       <Navbar1 />
       <Routes>
         <Route path="/signup" element={<Signup />}></Route>
-        <Route path="/login" element={<Login />}></Route>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="" element={<SecureRoutes/>}>
         <Route path="/products" element={<Products />}></Route>
+        </Route>
+       
       </Routes>
 
       <ToastContainer />

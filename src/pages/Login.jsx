@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import LoginForm from "../components/LoginForm";
 import axios from "axios";
 import { errorToast, successToast } from "../services/toast.service";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const nav = useNavigate();
   const [inputData, setInputData] = useState();
 
   const changeHandle = (e) => {
@@ -23,7 +25,9 @@ const Login = () => {
         "https://backend-mu-pied.vercel.app/users/login",
         inputData
       );
-      // console.log(resp.data.message)
+      // console.log(resp.data.message
+      localStorage.setItem("isLoggedIn", true);
+      nav("/products");
       if (resp.data.status) {
         successToast(resp.data.message);
       }
