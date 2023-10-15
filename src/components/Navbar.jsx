@@ -4,30 +4,26 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 
-
 const Navbar1 = () => {
   return (
-    <Navbar bg="light" data-bs-theme="light">
+    <>
+        <Navbar bg="light" data-bs-theme="light" style={{ height: "100px" }}>
       <Container>
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
-        <Nav className="me-auto">
-          <Nav.Link href="#home"><Link to="Navbar1">Home</Link></Nav.Link>
-        </Nav>
+        <Navbar.Brand>
+          <Link to="/Navbar1">Navbar</Link>
+        </Navbar.Brand>
         <Nav className="ms-auto">
-          <Nav.Link href="#login">
-            <Link to='/'>
-            <button className="btn btn-outline-primary">Log In</button>
-            </Link>
-          </Nav.Link>
-          <Nav.Link href="#signup">
-            <Link to='/signup'>
+          <Link to="/">
+            <button className="btn btn-outline-primary me-2">Log In</button>
+          </Link>
+          <Link href="#signup" to="/signup">
             <button className="btn btn-dark">Sign Up</button>
-            </Link>
-            
-          </Nav.Link>
+          </Link>
         </Nav>
       </Container>
     </Navbar>
+    </>
+
   );
 };
 

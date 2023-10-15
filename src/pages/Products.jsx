@@ -194,15 +194,15 @@ const Products = () => {
         </button>
       </div>
 
-      <div className=" container d-flex  justify-content-between p-3">
+      <div className=" container d-flex  justify-content-between p-3 ">
         <button
-          className="btn btn-outline-dark"
+          className="btn btn-outline-dark "
           onClick={addProductClickHandle}
         >
           Add Product
         </button>
         <Form.Select
-          style={{ width: "13rem" }}
+          style={{ width: "8rem" }}
           onChange={(e) => filterProducts(e.target.value)}
         >
           <option value="">Filter by Category</option>
@@ -216,7 +216,7 @@ const Products = () => {
         </Form.Select>
         <FloatingLabel
           controlId="floatingInput"
-          label="Search Products Here"
+          label="Search "
           className="w-25"
         >
           <Form.Control
